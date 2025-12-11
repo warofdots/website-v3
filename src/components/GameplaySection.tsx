@@ -80,7 +80,7 @@ const GameplaySection = () => {
         <div className="relative group">
           {/* Outer glow frame */}
           <div className="absolute -inset-1 bg-gradient-to-r from-war-red/20 via-war-gold/30 to-war-blue/20 rounded-xl blur-sm opacity-60" />
-          
+
           <div className="war-card overflow-hidden rounded-xl relative">
             {/* Corner decorations */}
             <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-war-gold/40 rounded-tl-xl z-10" />
@@ -94,11 +94,10 @@ const GameplaySection = () => {
                   key={index}
                   src={screenshot.src}
                   alt={screenshot.alt}
-                  className={`absolute inset-0 w-full h-full object-cover transition-all duration-500 ${
-                    index === currentIndex 
-                      ? 'opacity-100 scale-100' 
+                  className={`absolute inset-0 w-full h-full object-cover transition-all duration-500 ${index === currentIndex
+                      ? 'opacity-100 scale-100'
                       : 'opacity-0 scale-105'
-                  }`}
+                    }`}
                   loading="lazy"
                 />
               ))}
@@ -137,11 +136,10 @@ const GameplaySection = () => {
             <button
               key={index}
               onClick={() => goToSlide(index)}
-              className={`flex-shrink-0 w-16 h-10 md:w-24 md:h-14 rounded-md overflow-hidden border-2 transition-all duration-300 relative ${
-                index === currentIndex 
-                  ? 'border-war-gold scale-110 shadow-lg shadow-war-gold/20' 
+              className={`flex-shrink-0 w-16 h-10 md:w-24 md:h-14 rounded-md overflow-hidden border-2 transition-all duration-300 relative ${index === currentIndex
+                  ? 'border-war-gold scale-110 shadow-lg shadow-war-gold/20'
                   : 'border-border/30 opacity-50 hover:opacity-100 hover:border-border'
-              }`}
+                }`}
             >
               <img
                 src={screenshot.src}
@@ -161,11 +159,10 @@ const GameplaySection = () => {
           {screenshots.map((_, index) => (
             <div
               key={index}
-              className={`h-0.5 rounded-full transition-all duration-300 ${
-                index === currentIndex 
-                  ? 'w-8 bg-war-gold' 
+              className={`h-0.5 rounded-full transition-all duration-300 ${index === currentIndex
+                  ? 'w-8 bg-war-gold'
                   : 'w-2 bg-border/50'
-              }`}
+                }`}
             />
           ))}
         </div>
