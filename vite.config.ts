@@ -2,12 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 
-
-// https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
-  // GitHub Pages requires a base path matching the repo name
-  // Set GITHUB_PAGES=true in your build command for GitHub Pages deployment
-  base: process.env.GITHUB_PAGES === "true" ? "/website-v3/" : "/",
   server: {
     host: "::",
     port: 8080,
@@ -18,4 +13,6 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+
+  base: "/", 
 }));
