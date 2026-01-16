@@ -1,27 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { ChevronLeft, ChevronRight, Crosshair, Target } from 'lucide-react';
 import redDot from '@/assets/red-dot.png';
 import blueDot from '@/assets/blue-dot.png';
+import { screenshots } from '@/constants/screenshotsgp.ts';
 
-import gameplay1 from '@/assets/gameplay-1.png';
-import gameplay2 from '@/assets/gameplay-2.png';
-import gameplay3 from '@/assets/gameplay-3.png';
-import gameplay4 from '@/assets/gameplay-4.png';
-import gameplay5 from '@/assets/gameplay-5.png';
-import gameplay6 from '@/assets/gameplay-6.png';
 
-const screenshots = [
-  { src: gameplay1, alt: 'War of Dots Gameplay - River Battles' },
-  { src: gameplay2, alt: 'War of Dots Gameplay - Coastal Assault' },
-  { src: gameplay3, alt: 'War of Dots Gameplay - Mountain Pass' },
-  { src: gameplay4, alt: 'War of Dots Gameplay - Strategic Positioning' },
-  { src: gameplay5, alt: 'War of Dots Gameplay - Forest Combat' },
-  { src: gameplay6, alt: 'War of Dots Gameplay - Bridge Control' },
-];
 
 const GameplaySection = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const touchStartX = useRef<number | null>(null);
+  const touchEndX = useRef<number | null>(null);
 
   const goToSlide = (index: number) => {
     if (isTransitioning) return;
@@ -36,6 +25,31 @@ const GameplaySection = () => {
 
   const prevSlide = () => {
     goToSlide((currentIndex - 1 + screenshots.length) % screenshots.length);
+  };
+
+  // Touch swipe handlers for mobile
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    touchEndX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    if (touchStartX.current === null || touchEndX.current === null) return;
+
+    const swipeDistance = touchStartX.current - touchEndX.current;
+    const minSwipeDistance = 50;
+
+    if (swipeDistance > minSwipeDistance) {
+      nextSlide();
+    } else if (swipeDistance < -minSwipeDistance) {
+      prevSlide();
+    }
+
+    touchStartX.current = null;
+    touchEndX.current = null;
   };
 
   // Auto-advance slides (pauses on interaction)
@@ -81,7 +95,12 @@ const GameplaySection = () => {
           {/* Outer glow frame */}
           <div className="absolute -inset-1 bg-gradient-to-r from-war-red/20 via-war-gold/30 to-war-blue/20 rounded-xl blur-sm opacity-60" />
 
-          <div className="war-card overflow-hidden rounded-xl relative">
+          <div
+            className="war-card overflow-hidden rounded-xl relative"
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+          >
             {/* Corner decorations */}
             <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-war-gold/40 rounded-tl-xl z-10" />
             <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-war-gold/40 rounded-tr-xl z-10" />
@@ -95,8 +114,8 @@ const GameplaySection = () => {
                   src={screenshot.src}
                   alt={screenshot.alt}
                   className={`absolute inset-0 w-full h-full object-cover transition-all duration-500 ${index === currentIndex
-                      ? 'opacity-100 scale-100'
-                      : 'opacity-0 scale-105'
+                    ? 'opacity-100 scale-100'
+                    : 'opacity-0 scale-105'
                     }`}
                   loading="lazy"
                 />
@@ -130,15 +149,15 @@ const GameplaySection = () => {
           </div>
         </div>
 
-        {/* Thumbnail Navigation - Enhanced */}
-        <div className="flex justify-center gap-2 md:gap-3 mt-8 overflow-x-auto pb-2 px-4">
+        {/* Thumbnail Navigation - Hidden on mobile, shown on md+ */}
+        <div className="hidden md:flex justify-center gap-2 md:gap-3 mt-8 overflow-x-auto pb-2 px-4">
           {screenshots.map((screenshot, index) => (
             <button
               key={index}
               onClick={() => goToSlide(index)}
               className={`flex-shrink-0 w-16 h-10 md:w-24 md:h-14 rounded-md overflow-hidden border-2 transition-all duration-300 relative ${index === currentIndex
-                  ? 'border-war-gold scale-110 shadow-lg shadow-war-gold/20'
-                  : 'border-border/30 opacity-50 hover:opacity-100 hover:border-border'
+                ? 'border-war-gold scale-110 shadow-lg shadow-war-gold/20'
+                : 'border-border/30 opacity-50 hover:opacity-100 hover:border-border'
                 }`}
             >
               <img
@@ -154,14 +173,29 @@ const GameplaySection = () => {
           ))}
         </div>
 
-        {/* Progress bar for current slide */}
-        <div className="flex justify-center gap-1 mt-4">
+        {/* Mobile Dot Pagination - Interactive dots for mobile */}
+        <div className="flex md:hidden justify-center gap-2 mt-6">
+          {screenshots.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => goToSlide(index)}
+              className={`rounded-full transition-all duration-300 ${index === currentIndex
+                ? 'w-3 h-3 bg-war-gold shadow-lg shadow-war-gold/30'
+                : 'w-2 h-2 bg-border/50 hover:bg-border'
+                }`}
+              aria-label={`Go to slide ${index + 1}`}
+            />
+          ))}
+        </div>
+
+        {/* Progress bar for current slide - Desktop only */}
+        <div className="hidden md:flex justify-center gap-1 mt-4">
           {screenshots.map((_, index) => (
             <div
               key={index}
               className={`h-0.5 rounded-full transition-all duration-300 ${index === currentIndex
-                  ? 'w-8 bg-war-gold'
-                  : 'w-2 bg-border/50'
+                ? 'w-8 bg-war-gold'
+                : 'w-2 bg-border/50'
                 }`}
             />
           ))}

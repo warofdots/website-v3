@@ -1,30 +1,10 @@
-import { Target, Swords, Gem, Star, Shield } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import redDot from '@/assets/red-dot.png';
 import blueDot from '@/assets/blue-dot.png';
 
 // features
-const features = [
-  {
-    icon: Target,
-    title: 'Dominate the Map',
-    description: 'Break enemy lines and take control of key cities. The more you own, the stronger you grow.',
-  },
-  {
-    icon: Swords,
-    title: 'Live Tactical Combat',
-    description: 'Engage in live, high-stakes battles. Think fast, adapt faster. Your decisions in the heat of the moment determine whether you rise or fall.',
-  },
-  {
-    icon: Gem,
-    title: 'Resource Management',
-    description: 'Stockpile resources or upgrade your troops. Outmaneuver your opponents not just with force, but with cunning strategy',
-  },
-  {
-    icon: Star,
-    title: 'Special Events',
-    description: 'limited-time challenges and map-altering events will make your War of Dots experience truly interesting',
-  },
-];
+import { features } from '@/constants/aboutpage';
+import { Shield, BookOpen } from 'lucide-react';
 
 const AboutSection = () => {
   return (
@@ -94,12 +74,23 @@ const AboutSection = () => {
           <p className="font-military text-xl md:text-2xl text-gradient-blood">
             Think you can rise above the chaos and outsmart the rest?
           </p>
-          <p className="text-lg text-muted-foreground mt-2 mb-8">
+          <p className="text-lg text-muted-foreground mt-2">
             The battle's waiting.
           </p>
 
-          {/* Red and Blue dots display */}
-          <div className="flex items-center justify-center gap-6 md:gap-10 mt-8">
+          {/* How to Play Button - positioned between text and dots */}
+          <div className="mt-8 mb-10">
+            <Link
+              to="/how-to-play"
+              className="inline-flex items-center gap-3 btn-war-gold px-8 py-3 rounded-md font-semibold uppercase tracking-wider hover:scale-105 transition-transform duration-300"
+            >
+              <BookOpen className="w-5 h-5" />
+              How to Play
+            </Link>
+          </div>
+
+          {/* Red and Blue dots display - visual finale */}
+          <div className="flex items-center justify-center gap-6 md:gap-10">
             <div className="relative group">
               <div className="absolute inset-0 bg-war-blue/30 rounded-full blur-xl scale-110 group-hover:scale-125 transition-transform duration-500" />
               <img
